@@ -237,8 +237,6 @@ macro_rules! make_static {
         type T = impl ::core::marker::Sized;
         $(#[$m])*
         static STATIC_CELL: $crate::StaticCell<T> = $crate::StaticCell::new();
-        #[deny(unused_attributes)]
-        let (x,) = unsafe { STATIC_CELL.uninit().write(($val,)) };
-        x
+        &mut $crate::StaticCell::<(_,)>::init(&STATIC_CELL, ($val,)).0
     }};
 }
